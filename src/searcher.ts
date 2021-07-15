@@ -14,9 +14,9 @@ export class Searcher {
         }
     }
 
-    readFolderPath = () => vscode.workspace.getConfiguration(Constants.ExtensionName).get(Constants.PathToHookFolder) as string;
+    readFolderPath = () => vscode.workspace.getConfiguration(Constants.extensionName).get(Constants.extensionName) as string;
 
-    isSettingExist = () => vscode.workspace.getConfiguration(Constants.ExtensionName).get(Constants.PathToHookFolder);
+    isSettingExist = () => vscode.workspace.getConfiguration(Constants.extensionName).get(Constants.pathToHookFolder);
 
     findFiles = () => {
         const folderPath = this.readFolderPath();

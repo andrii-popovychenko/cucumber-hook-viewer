@@ -1,6 +1,6 @@
 enum Constants {
-    ExtensionName = 'cucumberHookViewer',
-    PathToHookFolder = 'hooksPath'
+    extensionName = 'cucumberHookViewer',
+    pathToHookFolder = 'hooksPath'
 }
 
-export default Constants
+export default Constants;
