@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
+import { Searcher } from './searcher';
 
 export function activate(context: vscode.ExtensionContext) {
 	let disposable = vscode.commands.registerCommand('cucumber-hooks-viewer.viewHooksList', () => {
-		vscode.window.showInformationMessage('Hello World from cucumber-hooks-viewer!');
 	});
 
 	context.subscriptions.push(disposable);

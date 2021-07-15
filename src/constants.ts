@@ -1,5 +1,5 @@
 enum Constants {
-    extensionName = 'cucumberHookViewer',
+    extensionName = 'cucumberHooksViewer',
     pathToHookFolder = 'hooksPath'
 }
 

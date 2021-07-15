@@ -12,7 +12,7 @@
 	"activationEvents": [
 		"onCommand:cucumber-hooks-viewer.viewHooksList"
 	],
-	"main": "./build/extension.js",
+	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
@@ -23,7 +23,7 @@
 		"configuration": {
 			"title": "Cucumber hook viewer",
 			"properties": {
-				"cucumberHookViever.hooksPath": {
+				"cucumberHooksViewer.hooksPath": {
 					"type": "string",
 					"default": "",
 					"description": "Specifies the folder path containing cucumber hooks .ts files."
@@ -37,7 +37,7 @@
 		"watch": "tsc -watch -p ./",
 		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
-		"test": "node ./build/test/runTest.js"
+		"test": "node ./out/test/runTest.js"
 	},
 	"devDependencies": {
 		"@types/vscode": "^1.57.0",
