@@ -10,16 +10,26 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:cucumber-hooks-viewer.helloWorld"
+		"onCommand:cucumber-hooks-viewer.viewHooksList"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "cucumber-hooks-viewer.helloWorld",
-				"title": "Hello World"
+				"command": "cucumber-hooks-viewer.viewHooksList",
+				"title": "Show hooks list"
 			}
-		]
+		],
+		"configuration": {
+			"title": "Cucumber hook viewer",
+			"properties": {
+				"cucumberHookViever.hooksPath": {
+					"type": "string",
+					"default": "",
+					"description": "Specifies the folder path containing cucumber hooks .ts files."
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
