@@ -10,13 +10,14 @@ export class Parser {
             textDocument.getText(),
             ts.ScriptTarget.Latest
         );
-        let index = 0;
-        const hooks = new Map<number, Hook>();
+        const hooksCollection = new Map<string, Hook[]>();
         node.forEachChild(child => {
             if (child.kind === ts.SyntaxKind.ExpressionStatement) {
                 const nodeValues = Object.entries(child);
                 let comments = '';
                 let tags = '';
+                let hookType = '';
+                console.log(nodeValues);
                 nodeValues.forEach(([key, value]) => {
                     if (key === 'jsDoc') {
                         comments = value[0].comment;
@@ -30,6 +31,7 @@ export class Parser {
                                     tags = propNode.initializer.text;
                                 }
                             }
+                            hookType = value['expression'].escapedText;
                         }
                     }
                 });
@@ -38,10 +40,16 @@ export class Parser {
                         tag: tags,
                         description: comments
                     };
-                    hooks.set(index++, hook);
+                    const hooksByType = hooksCollection.get(hookType);
+                    if (hooksByType) {
+                        hooksByType.push(hook);
+                        hooksCollection.set(hookType, hooksByType);
+                    } else {
+                        hooksCollection.set(hookType, [hook]);
+                    }
                 }
             }
         });
-        return hooks;
+        return hooksCollection;
     };
 }
