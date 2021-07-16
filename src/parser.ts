@@ -23,14 +23,16 @@ export class Parser {
                     collectAllHooks(child.getChildren(), hooksCollection);
                 } else {
                     if (child.kind === ts.SyntaxKind.ExpressionStatement) {
-                        const { hookType, hook } =
+                        const { hookType, hook, isEmpty } =
                             Parser.getInformationFromNode(child);
-                        const hooksByType = hooksCollection.get(hookType);
-                        if (hooksByType) {
-                            hooksByType.push(hook);
-                            hooksCollection.set(hookType, hooksByType);
-                        } else {
-                            hooksCollection.set(hookType, [hook]);
+                        if (!isEmpty) {
+                            const hooksByType = hooksCollection.get(hookType);
+                            if (hooksByType) {
+                                hooksByType.push(hook);
+                                hooksCollection.set(hookType, hooksByType);
+                            } else {
+                                hooksCollection.set(hookType, [hook]);
+                            }
                         }
                     }
                 }
@@ -67,6 +69,7 @@ export class Parser {
             description: comments || "",
         };
         return {
+            isEmpty: !tags.length,
             hookType,
             hook,
         };
