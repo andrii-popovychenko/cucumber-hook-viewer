@@ -10,7 +10,6 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:cucumber-hooks-viewer.viewHooksList",
 		"onView:cucumberHooksViewer"
 	],
 	"main": "./out/extension.js",
@@ -25,10 +24,20 @@
 		},
 		"commands": [
 			{
-				"command": "cucumber-hooks-viewer.viewHooksList",
-				"title": "Show hooks list"
+				"command": "cucumberHooksViewer.refreshData",
+				"title": "Refresh",
+				"icon": "$(refresh)"
 			}
 		],
+		"menus": {
+			"view/title": [
+				{
+					"command": "cucumberHooksViewer.refreshData",
+					"when": "view == cucumberHooksViewer",
+					"group": "navigation"
+				}
+			]
+		},
 		"configuration": {
 			"title": "Cucumber hook viewer",
 			"properties": {

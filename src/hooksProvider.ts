@@ -8,9 +8,26 @@ import {
 import * as path from "path";
 import * as vscode from "vscode";
 import { Parser } from "./parser";
+import { Searcher } from "./searcher";
 
 export class HooksDataProvider implements TreeDataProvider<TreeItem> {
-    constructor(private files: Uri[]) {}
+    private _onDidChangeTreeData: vscode.EventEmitter<
+        FilesLevel | TreeItem | undefined | null | void
+    > = new vscode.EventEmitter<
+        FilesLevel | TreeItem | undefined | null | void
+    >();
+    readonly onDidChangeTreeData: vscode.Event<
+        FilesLevel | TreeItem | undefined | null | void
+    > = this._onDidChangeTreeData.event;
+
+    private files: Uri[] = [];
+
+    constructor() {}
+
+    private getFiles = () => {
+        const searcher = new Searcher();
+        return searcher.findFiles();
+    };
 
     getTreeItem(element: FilesLevel | TreeItem): TreeItem {
         return element;
@@ -37,6 +54,13 @@ export class HooksDataProvider implements TreeDataProvider<TreeItem> {
             }
         }
     }
+
+    refresh = () => {
+        this.getFiles().then((result) => {
+            this.files = result.sort();
+            this._onDidChangeTreeData.fire();
+        });
+    };
 
     private collectChildrenFromDoc(document: TextDocument) {
         const children: HookTypeLevel[] = [];
