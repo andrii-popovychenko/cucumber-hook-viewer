@@ -16,7 +16,7 @@ export class HooksDataProvider implements TreeDataProvider<TreeItem> {
         return element;
     }
 
-    getChildren(element?: FilesLevel | undefined) {
+    getChildren(element?: FilesLevel | HookTypeLevel | undefined) {
         if (!element) {
             return this.files.map(
                 (file) =>
@@ -27,18 +27,29 @@ export class HooksDataProvider implements TreeDataProvider<TreeItem> {
                     )
             );
         } else {
-            const uriFile = Uri.file(element.fsPath);
-            return vscode.workspace
-                .openTextDocument(uriFile)
-                .then((result) => this.collectChildrenFromDoc(result));
+            if (element instanceof FilesLevel) {
+                const uriFile = Uri.file(element.fsPath);
+                return vscode.workspace
+                    .openTextDocument(uriFile)
+                    .then((result) => this.collectChildrenFromDoc(result));
+            } else if (element instanceof HookTypeLevel) {
+                return element.children;
+            }
         }
     }
 
     private collectChildrenFromDoc(document: TextDocument) {
-        const children: TreeItem[] = [];
+        const children: HookTypeLevel[] = [];
         const hooksData = Parser.parseHooksFromFile(document);
-        for (const [key, value] of hooksData) {
-            children.push(new HooksLevel(value.tag, value.description));
+        for (const [hookType, hooks] of hooksData) {
+            children.push(
+                new HookTypeLevel(
+                    hookType,
+                    hooks.map(
+                        (hook) => new HooksLevel(hook.tag, hook.description)
+                    )
+                )
+            );
         }
         return children;
     }
@@ -54,7 +65,17 @@ class FilesLevel extends TreeItem {
         this.fsPath = fsPath;
     }
 }
-
+class HookTypeLevel extends TreeItem {
+    constructor(public label: string, public children?: HooksLevel[]) {
+        super(
+            label,
+            children === undefined
+                ? TreeItemCollapsibleState.None
+                : TreeItemCollapsibleState.Collapsed
+        );
+        this.children = children;
+    }
+}
 class HooksLevel extends TreeItem {
     constructor(public label: string, comments: string) {
         super(label, TreeItemCollapsibleState.None);
